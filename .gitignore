@@ -1,5 +1,7 @@
 # Ignore PCAP files
 *.pcap
+*.pcapng
+data/*.pcap
 
 # Ignore Python cache files
 __pycache__/
