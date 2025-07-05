@@ -1,10 +1,10 @@
-# detect_live.py (Background Script)
-from scapy.all import sniff, DNS, IP
+from scapy.all import sniff, DNS, IP, get_if_list
 import pandas as pd
 import joblib
 import os
 from datetime import datetime
 import traceback
+import platform
 
 # Load trained model
 model = joblib.load("models/trained_model.pkl")
@@ -15,7 +15,7 @@ os.makedirs("logs", exist_ok=True)
 
 def log_message(msg):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(LOG_PATH, "a", encoding="utf-8") as f:  # ✅ Safe encoding
+    with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] {msg}\n")
 
 def detect_packet(pkt):
@@ -50,9 +50,17 @@ def detect_packet(pkt):
             log_message(f"[ERROR] Failed to process packet: {e}")
             log_message(traceback.format_exc())
 
-# Main entry
-print("[*] DNS Monitoring started on interface: Wi-Fi...")
+# --- Detect platform and choose interface ---
+iface = "Wi-Fi"  # default for Windows
+
+if platform.system() == "Darwin":  # macOS
+    iface = "en0"  # usually Wi-Fi interface on Mac; change if needed
+
+print("[*] Available Interfaces:", get_if_list())
+print(f"[*] DNS Monitoring started on interface: {iface}...")
+
+# --- Start sniffing ---
 try:
-    sniff(filter="udp port 53", prn=detect_packet, iface="Wi-Fi", store=0)
+    sniff(filter="udp port 53", prn=detect_packet, iface=iface, store=0)
 except Exception as e:
     print(f"[!] Error: {e}")
