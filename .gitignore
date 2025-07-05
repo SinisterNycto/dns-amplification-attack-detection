@@ -1,0 +1,15 @@
+# Ignore PCAP files
+*.pcap
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore log files
+logs/detection_log.txt
+
+
