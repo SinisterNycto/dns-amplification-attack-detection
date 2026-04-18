@@ -60,7 +60,7 @@ pip install scapy pandas numpy scikit-learn matplotlib seaborn streamlit joblib
 
 ---
 
-## 🔍 How to Use This Project
+## How to Use This Project
 
 ### Step 1: Run Live Detection Engine
 Run the following script to start background DNS monitoring:
@@ -79,7 +79,7 @@ Then open the browser tab that appears.
 
 ---
 
-## 💡 How to Test Traffic
+## How to Test Traffic
 
 To simulate DNS queries:
 ```bash
