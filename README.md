@@ -6,7 +6,7 @@ A user-friendly Streamlit dashboard displays real-time detection logs, model met
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 DNS-Amplification-Detection/
@@ -34,7 +34,7 @@ DNS-Amplification-Detection/
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 1. **Clone the repository**
 ```bash
@@ -62,7 +62,7 @@ pip install scapy pandas numpy scikit-learn matplotlib seaborn streamlit joblib
 
 ## 🔍 How to Use This Project
 
-### ✅ Step 1: Run Live Detection Engine
+### Step 1: Run Live Detection Engine
 Run the following script to start background DNS monitoring:
 ```bash
 python scripts/detect_live.py
@@ -70,7 +70,7 @@ python scripts/detect_live.py
 
 This will start capturing DNS traffic and write real-time detection logs to `logs/detection_log.txt`.
 
-### ✅ Step 2: Launch Streamlit Dashboard
+### Step 2: Launch Streamlit Dashboard
 In a separate terminal, run:
 ```bash
 streamlit run streamlit_app.py
@@ -89,7 +89,7 @@ Or run your own script like `spoof_batch.py` to simulate amplified queries.
 
 ---
 
-## 🧠 How It Works
+## How It Works
 - Uses Scapy to sniff packets.
 - Extracts features like packet size, TTL, query type, etc.
 - Trained a Random Forest model to classify traffic.
@@ -100,7 +100,7 @@ Or run your own script like `spoof_batch.py` to simulate amplified queries.
 ---
 
 
-## 🛡️ Disclaimer
+## Disclaimer
 This project is for **educational and research purposes only**. Do not send spoofed packets to public DNS servers or external IPs.
 
 ---
