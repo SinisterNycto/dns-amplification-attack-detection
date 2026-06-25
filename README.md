@@ -1,107 +1,76 @@
-# ML-Based Detection of DNS Amplification Attacks in Real-Time Traffic
+# DNS Amplification Attack Detector
 
-This project implements an end-to-end system for detecting DNS Amplification Attacks using real-time network traffic monitoring combined with machine learning classification. It features a background packet sniffer that captures DNS traffic, extracts relevant features (like packet size, query type, TTL, etc.), and classifies the traffic as either normal or malicious using a trained Random Forest model.
+A two-part system for detecting DNS Amplification DDoS attacks using machine learning. 
 
-A user-friendly Streamlit dashboard displays real-time detection logs, model metrics, and allows users to upload .pcap files for offline analysis. The system is lightweight, educational, and demonstrates how ML can be applied effectively in cybersecurity to detect amplification-based attacks in real-time.
+This project consists of:
+1. **An Edge Sniffer (`detect_live.py`)**: A lightweight Python script designed to run locally on a server or router. It sniffs raw network traffic in real-time, extracts volumetric time-window features, and logs suspicious activity to a local SQLite database.
+2. **A Web Dashboard**: A Streamlit web application that visualizes the real-time database logs. It also includes a public-facing "PCAP Analyzer" tab that allows security researchers to upload `.pcap` files and run them through the XGBoost model directly in the browser.
+
+## Tech Stack
+- **Machine Learning**: XGBoost, Scikit-learn, Pandas
+- **Networking**: Scapy (for PCAP parsing and live packet sniffing)
+- **Frontend**: Streamlit
+- **Database**: SQLAlchemy (SQLite by default, compatible with PostgreSQL)
+
+## Features
+- **Live Traffic Monitoring**: Sniffs packets on your network card and calculates queries/sec, responses/sec, and response size averages in 1-second rolling windows.
+- **XGBoost Inference**: Uses a pre-trained XGBClassifier with 100% test accuracy on synthetic attack data to evaluate traffic windows.
+- **PCAP Analysis**: A web-based analyzer where you can upload `.pcap` files and instantly see which timestamps contain DDoS traffic. 
+- **Explainable AI**: Generates Feature Importance plots to demonstrate exactly which volumetric metrics trigger the XGBoost detection.
+
+---
+
+## Installation & Setup
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/SinisterNycto/dns-amplification-attack-detection.git
+cd dns-amplification-attack-detection
+```
+
+2. **Set up the virtual environment**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+---
+
+## Running the Project
+
+### 1. The Web Dashboard (Cloud-Ready)
+To start the Streamlit interface (which includes the Live Database Viewer, Model Metrics, and the PCAP Analyzer):
+```bash
+source venv/bin/activate
+streamlit run dashboard/streamlit_app.py
+```
+*Note: The PCAP Analyzer is fully functional when deployed to cloud hosts like Streamlit Community Cloud.*
+
+### 2. The Live Network Sniffer (Local Only)
+To run the live detection engine on your physical machine, you need `sudo` privileges to sniff raw packets off your network card:
+```bash
+source venv/bin/activate
+sudo venv/bin/python scripts/detect_live.py --interface en0
+```
+*(If you are on Windows or Linux, change `en0` to your active network interface like `Wi-Fi` or `eth0`).*
+
+### 3. Simulating an Attack
+While the live sniffer is running, you can run the spoofing script to simulate a massive burst of DNS responses hitting your machine:
+```bash
+source venv/bin/activate
+sudo venv/bin/python scripts/spoof_batch.py
+```
+Check the Streamlit dashboard—it will instantly flag the attack window in red!
 
 ---
 
 ## Project Structure
 
-```
-DNS-Amplification-Detection/
-├── dashboard/
-|    └── streamlit_app.py           # Streamlit Dashboard UI
-|       
-├── data/                         # Extracted features, confusion matrix, metrics
-│   ├── extracted_features.csv
-│   ├── metrics_report.csv
-│   └── confusion_matrix.png
-│
-├── models/                      # Trained ML model
-│   └── trained_model.pkl
-│
-├── logs/                        # Real-time detection logs
-│   └── 
-│
-├── scripts/
-│   ├── detect_live.py           # Background live traffic sniffer
-│   ├── extract_features.py      # Extracts features from pcap files
-│   └── train_model.py           # Trains the ML model  
-|                  
-└── README.md
-```
-
----
-
-## Installation
-
-1. **Clone the repository**
-```bash
-git clone https://github.com/your-username/DNS-Amplification-Detection.git
-cd DNS-Amplification-Detection
-```
-
-2. **Create virtual environment**
-```bash
-python -m venv venv
-venv\Scripts\activate  # On Windows
-source venv/bin/activate  # On Linux/Mac
-```
-
-3. **Install dependencies**
-```bash
-pip install -r requirements.txt
-```
-> If `requirements.txt` is not present, install manually:
-```bash
-pip install scapy pandas numpy scikit-learn matplotlib seaborn streamlit joblib
-```
-
----
-
-## How to Use This Project
-
-### Step 1: Run Live Detection Engine
-Run the following script to start background DNS monitoring:
-```bash
-python scripts/detect_live.py
-```
-
-This will start capturing DNS traffic and write real-time detection logs to `logs/detection_log.txt`.
-
-### Step 2: Launch Streamlit Dashboard
-In a separate terminal, run:
-```bash
-streamlit run streamlit_app.py
-```
-Then open the browser tab that appears.
-
----
-
-## How to Test Traffic
-
-To simulate DNS queries:
-```bash
-nslookup google.com
-```
-Or run your own script like `spoof_batch.py` to simulate amplified queries.
-
----
-
-## How It Works
-- Uses Scapy to sniff packets.
-- Extracts features like packet size, TTL, query type, etc.
-- Trained a Random Forest model to classify traffic.
-- Logs all detections to a file.
-- Streamlit visualizes logs and model metrics.
-
-
----
-
+- `dashboard/`: Contains the Streamlit app.
+- `scripts/`: Core logic including the live sniffer, ML training script, Scapy traffic simulators, and PCAP generators.
+- `data/`: Sample `.pcap` files and exported model metrics (Confusion Matrix, Feature Importance).
+- `models/`: The saved XGBoost JSON model.
 
 ## Disclaimer
-This project is for **educational and research purposes only**. Do not send spoofed packets to public DNS servers or external IPs.
-
----
-> Note: All `.pcap` files used for training and testing were local traffic captures and are not included in the GitHub repository for privacy and size reasons. You can generate your own using tools like `Wireshark`, `Scapy`, or `spoof_batch.py`.
+This project is strictly for educational and cybersecurity research purposes. Do not use the spoofing scripts against infrastructure you do not own.
