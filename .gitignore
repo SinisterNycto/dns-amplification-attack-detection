@@ -1,0 +1,18 @@
+# Ignore PCAP files (except the sample one for Streamlit)
+*.pcap
+*.pcapng
+data/*.pcap
+!data/sample_attack.pcap
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore log files
+logs/detection_log.txt
+
+
