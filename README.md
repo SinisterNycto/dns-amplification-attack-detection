@@ -73,4 +73,4 @@ Check the Streamlit dashboard—it will instantly flag the attack window in red!
 - `models/`: The saved XGBoost JSON model.
 
 ## Disclaimer
-This project is strictly for educational and cybersecurity research purposes. Do not use the spoofing scripts against infrastructure you do not own.
+This project is strictly for educational and cybersecurity research purposes. DO NOT use the spoofing scripts against infrastructure you do not own.
