@@ -16,6 +16,11 @@ st.title("DNS Amplification Attack Detection Dashboard")
 # Initialize DB connection
 try:
     engine = create_engine(DATABASE_URL)
+    
+    # Ensure the table is created before querying (fixes Streamlit Cloud OperationalError)
+    from src.database import Base
+    Base.metadata.create_all(engine)
+    
     Session = sessionmaker(bind=engine)
     session = Session()
 except Exception as e:
