@@ -32,7 +32,7 @@ choice = st.sidebar.selectbox("Navigation", menu)
 
 if choice == "Live Monitor":
     st.subheader("Real-time Traffic Monitoring")
-    st.info("Reading live logs from Database (PostgreSQL / SQLite).")
+    st.info("💡 **Viewing this on Streamlit Cloud?** This live table will be empty because cloud servers block raw network sniffing. Go to the **PCAP Analyzer** tab to test the ML model, or clone the GitHub repo to run the Live Sniffer on your own machine!")
 
     if session:
         # Fetch the last 50 logs

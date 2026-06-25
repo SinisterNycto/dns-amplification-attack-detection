@@ -6,6 +6,10 @@ This project consists of:
 1. **An Edge Sniffer (`detect_live.py`)**: A lightweight Python script designed to run locally on a server or router. It sniffs raw network traffic in real-time, extracts volumetric time-window features, and logs suspicious activity to a local SQLite database.
 2. **A Web Dashboard**: A Streamlit web application that visualizes the real-time database logs. It also includes a public-facing "PCAP Analyzer" tab that allows security researchers to upload `.pcap` files and run them through the XGBoost model directly in the browser.
 
+> [!IMPORTANT]
+> **Live Demo vs. Local Execution**  
+> If you are viewing the deployed Streamlit Cloud app, the **Live Monitor** will be empty because cloud hosts do not permit raw network packet sniffing. To test the machine learning model online, use the **PCAP Analyzer** tab. To use the Live Sniffer, clone this repository and run it locally!
+
 ## Tech Stack
 - **Machine Learning**: XGBoost, Scikit-learn, Pandas
 - **Networking**: Scapy (for PCAP parsing and live packet sniffing)
